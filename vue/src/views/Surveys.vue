@@ -38,11 +38,11 @@
    </div>
    <div class="flex flex-row flex-nowrap">
    <ListBox :options="statusList" optionListTitle='Status' @changeOption="setStatus"/>
-   <ListBox class="ml-3" :options="sortList" optionListTitle='Sort' @changeOption=""/>
+   <ListBox :options="sortList" optionListTitle='Sort' @changeOption="setSortFilter" class="ml-3" />
    </div>
   </div>
    <!--/ Surveys Actions -->
-
+   
     <div v-if="surveys.data.length" class="mb-4 mt-2 text-gray-700 text-sm lowercase"><span class="font-bold">{{ filterByTerm.length }}</span> results for {{ surveyStatus.name}} surveys on page</div>
     <Loading v-if="surveys.loading"/>
     <div v-else>
@@ -109,9 +109,14 @@ import ListBox from "../components/ListBox.vue";
 const search = ref('')
 const errors = ref('')
 const surveyStatus = ref({})
+const sortFilter = ref({})
 
 const setStatus = (data) => {
  return surveyStatus.value = data
+}
+
+const setSortFilter = (data) => {
+  return sortFilter.value = data
 }
 
 const statusList = [
@@ -128,21 +133,63 @@ const sortList = [
 
 const surveys = computed(() => store.state.surveys)
 
-const filterByTerm = computed(() => {
-  console.log(surveyStatus.value.name)
-  return store.state.surveys.data.filter(data => {
-    if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'All'){
-      return data.title.toLowerCase().includes(search.value.toLowerCase());
-    } else if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'Active'){
-      return data.status === true && data.title.toLowerCase().includes(search.value.toLowerCase())
-    } else if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'Draft'){
-      return data.status === false && data.title.toLowerCase().includes(search.value.toLowerCase())
-    } else {
-      return data.title.toLowerCase().includes(search.value.toLowerCase());
-    }
-  })
-})
+// const filterByTerm = computed(() => {
+//   console.log(surveyStatus.value.name)
+//   return store.state.surveys.data.filter(data => {
+//     if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'All'){
+//       return data.title.toLowerCase().includes(search.value.toLowerCase());
+//     } else if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'Active'){
+//       return data.status === true && data.title.toLowerCase().includes(search.value.toLowerCase())
+//     } else if(data.title.toLowerCase().includes(search.value.toLowerCase()) && surveyStatus.value.name === 'Draft'){
+//       return data.status === false && data.title.toLowerCase().includes(search.value.toLowerCase())
+//     } else {
+//       return data.title.toLowerCase().includes(search.value.toLowerCase());
+//     }
+//   })
+// })
 
+const filterByTerm = computed(() => {
+  let tempSurveys = store.state.surveys.data;
+
+  // Process search input
+  if (search.value != '' && search.value.toLowerCase()) {
+    tempSurveys = tempSurveys.filter((item) => {
+      return item.title.toLowerCase().includes(search.value.toLowerCase())
+    })
+  }
+
+  // Filter by status
+  if (surveyStatus.value.name === 'All') {
+    tempSurveys = tempSurveys.filter((item) => {
+      return item;
+   })
+  } else if (surveyStatus.value.name === 'Active'){
+     tempSurveys = tempSurveys.filter((item) => {
+      return item.status === true;
+   })
+  } else if (surveyStatus.value.name === 'Draft'){
+    tempSurveys = tempSurveys.filter((item) => {
+      return item.status === false;
+   })
+  }
+
+// Sort by order
+tempSurveys = tempSurveys.sort((a, b) => {
+  if (sortFilter.value.name == 'Name') {  
+    let fa = a.title.toLowerCase(), fb = b.title.toLowerCase()
+      if (fa < fb) return -1
+      if (fa > fb) return 1 
+    return 0        
+  } 
+  else if (sortFilter.value.name == 'Last created'){
+    return new Date(b.created_at) - new Date(a.created_at)
+  } else if(sortFilter.value.name == 'Last updated'){
+    return new Date(b.updated_at) -  new Date(a.updated_at)
+  }
+ }) 
+
+  return tempSurveys;
+})
 
 onMounted(() => {
   store.dispatch('getSurveys').then(() => {

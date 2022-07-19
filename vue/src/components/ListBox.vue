@@ -60,7 +60,8 @@ const props = defineProps({
   },
   optionListTitle : {
     type : String,
-    required : true
+    required : true,
+    default : 'Option Title'
   }
 })
 
