@@ -126,7 +126,7 @@
           <!--/ expire date -->
 
            <div v-if="model.created_at">
-            <label for="created_at" class="block text-sm font-medium text-gray-700">Create Date</label>
+            <label for="created_at" class="block text-sm font-medium text-gray-700">Created Date</label>
             <input 
             type="datetime-local"
             name="created_at"
@@ -276,8 +276,7 @@ watch(() => store.state.currentSurvey.data, (newVal, oldVal) => {
     }
   },
 )
-
- watch(() => 
+watch(() => 
  
    [model.value.title, model.value.description, model.value.status, model.value.image, model.value.expire_date, model.value.questions],
    (newVal, oldVal) => {
@@ -308,6 +307,7 @@ const onImageChoose = (e) => {
   reader.readAsDataURL(file)
 
 }
+
 
 const addQuestion = (index) => {
   const newQuestion = {

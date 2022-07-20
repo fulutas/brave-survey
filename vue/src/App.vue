@@ -1,26 +1,27 @@
 <template>
-<router-view></router-view>
+    <PageLoader />
+    <router-view></router-view>
 </template>
 
-<script>
+<script setup>
+import PageLoader from "./components/PageLoader.vue";
 </script>
 
-<style> 
+<style>
 
-html{
-    scroll-behavior: smooth;
+html {
+  scroll-behavior: smooth;
 }
 
 textarea {
-    resize: none;
+  resize: none;
 }
 
-img[lazy=loading] {
-    width: 10%;
-    object-fit: contain;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+img[lazy="loading"] {
+  width: 10%;
+  object-fit: contain;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 </style>
