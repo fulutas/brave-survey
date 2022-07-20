@@ -8,8 +8,8 @@
           v-if="model.id"
           style="padding-top: 0.1em; padding-bottom: 0.1rem"
           class="text-xs px-3 absolute ml-1 mt-1"
-          :class="[ model.status ? 'bg-green-200 text-green-800 rounded-full' : 'bg-red-200 text-red-800 rounded-full' ]" >
-          {{ model.status ? 'Active' : 'Draft' }}
+          :class="[ staticModel.status ? 'bg-green-200 text-green-800 rounded-full' : 'bg-red-200 text-red-800 rounded-full' ]" >
+          {{ staticModel.status ? 'Active' : 'Draft' }}
           </span>
         </h1>
         <div class="flex">
@@ -157,10 +157,10 @@
               type="checkbox"
               name="status" 
               v-model="model.status"
-              class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+              class="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded"
               >
             </div>
-            <div class="ml-3 text-sm">
+            <div class="ml-2 text-sm">
               <label for="status" class="font-medium text-gray-700">Active</label>
             </div>
           </div>
