@@ -3,7 +3,7 @@
     <template #header>
       <div class="flex items-center justify-between animate-fade-in-down">
         <h1 class="text-3xl font-bold text-gray-900 relative">
-          {{ route.params.id ? model.title : "Create New Survey" }}
+          {{ route.params.id ? staticModel.title : "Create New Survey" }}
           <span
           v-if="model.id"
           style="padding-top: 0.1em; padding-bottom: 0.1rem"
@@ -268,12 +268,15 @@ let model = ref({
   questions: [],
 });
 
+let staticModel = ref({})
+
 // Statedeki currentSurvey verilerinin değişimini izler ve değişiklik olduğunda güncellenir.
 watch(() => store.state.currentSurvey.data, (newVal, oldVal) => {
     model.value = {
       ...JSON.parse(JSON.stringify(newVal)),
       status : !!newVal.status
     }
+    staticModel.value = Object.assign({}, newVal)
   },
 )
 watch(() => 
